@@ -45,6 +45,7 @@ PACKAGE snap_core_types IS
   CONSTANT CARD_TYPE                       : std_logic_vector(7 DOWNTO 0);   -- Card type - currently specified:
                                                                              --             0x00 Alphadata KU3
                                                                              --             0x01 Nallatech 250S / FlashGT
+                                                                             --             0x02 Semptian NSA121B
   CONSTANT NVME_ENABLED                    : std_logic;                      -- Is the NVMe host logic enabled for connecting to NVMe Flash drives
 
 --------------------------------------------------------------------------------

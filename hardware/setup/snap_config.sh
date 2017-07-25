@@ -21,18 +21,28 @@
 
 SDRAM_SIZE="x\"0000\""
 if [ "$FPGACARD" == "KU3" ]; then
-  FPGA_FILTER="\-\- only for FPGACARD=FGT"
+  FPGA_FILTER1="\-\- only for FPGACARD=FGT"
+  FPGA_FILTER2="\-\- only for FPGACARD=NSA121B"
   CARD_TYPE="x\"00\""
   if [ "${SDRAM_USED^^}" == "TRUE" ]; then
     SDRAM_SIZE="x\"2000\""
   fi
-else
-  FPGA_FILTER="\-\- only for FPGACARD=KU3"
+elif [ "$FPGACARD" == "FGT" ]; then
+  FPGA_FILTER1="\-\- only for FPGACARD=KU3"
+  FPGA_FILTER2="\-\- only for FPGACARD=NSA121B"
   CARD_TYPE="x\"01\""
   if [ "${SDRAM_USED^^}" == "TRUE" ]; then
     SDRAM_SIZE="x\"1000\""
   fi
+else
+  FPGA_FILTER1="\-\- only for FPGACARD=KU3"
+  FPGA_FILTER2="\-\- only for FPGACARD=FGT"
+  CARD_TYPE="x\"02\""
+  if [ "${SDRAM_USED^^}" == "TRUE" ]; then
+    SDRAM_SIZE="x\"2000\""
+  fi
 fi
+
 if [ "${BRAM_USED^^}" == "TRUE" ]; then
   SDRAM_SIZE="x\"0001\""
 fi
@@ -73,7 +83,7 @@ NAME=`basename $2`
 
 echo -e "\t                        generating $NAME"
 
-grep -v "$FPGA_FILTER" $1 | grep -v "$DDRI_FILTER" |  grep -v "$DDR3_FILTER" | grep -v "$DDR4_FILTER" | grep -v "$BRAM_FILTER" | grep -v "$NVME_FILTER" > $2
+grep -v "$FPGA_FILTER1" $1 | grep -v "$FPGA_FILTER2" | grep -v "$DDRI_FILTER" |  grep -v "$DDR3_FILTER" | grep -v "$DDR4_FILTER" | grep -v "$BRAM_FILTER" | grep -v "$NVME_FILTER" > $2
 
 if ([ "$NAME" == "snap_core_types.vhd" ]); then
   sed -i 's/CONSTANT[ ^I]*NUM_OF_ACTIONS[ ^I]*:[ ^I]*integer.*;/CONSTANT NUM_OF_ACTIONS                  : integer RANGE 0 TO 16         := '$NUM_OF_ACTIONS';             /' $2

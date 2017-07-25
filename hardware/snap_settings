@@ -68,18 +68,25 @@ while [ -z "$SETUP_DONE" ]; do
     echo "Setting FPGACARD               to: \"$FPGACARD\""
   else
     echo "FPGACARD                is set to: \"$FPGACARD\""
-    if [[ ($FPGACARD != "KU3") && ($FPGACARD != "FGT") ]]; then
+    if [[ ($FPGACARD != "KU3") && ($FPGACARD != "FGT") && ($FPGACARD != "NSA121B") ]]; then
       echo
       echo "### ERROR ### FPGACARD=$FPGACARD is not supported"
       break
    fi
   fi
 
-  if [ -z "$FPGACHIP" ]; then
-    export FPGACHIP=xcku060-ffva1156-2-e
-    echo "Setting FPGACHIP               to:  \"$FPGACHIP\""
+  ## FGT and KU3 have the same part name xcku060-ffva1156-2-e
+  ## NSA121B uses xcku115-flva1517-2-e
+  ## Actually FPGACARD already decides FPGACHIP. Shall we simply? 
+  if [[ ($FPGACARD = "NSA121B") ]]; then
+    export FPGACHIP=xcku115-flva1517-2-e
   else
-    echo "FPGACHIP                is set to: \"$FPGACHIP\""
+    if [ -z "$FPGACHIP" ]; then
+      export FPGACHIP=xcku060-ffva1156-2-e
+      echo "Setting FPGACHIP               to:  \"$FPGACHIP\""
+    else
+      echo "FPGACHIP                is set to: \"$FPGACHIP\""
+    fi
   fi
 
   if [ -f "$PSL_DCP" ]; then
@@ -140,8 +147,8 @@ while [ -z "$SETUP_DONE" ]; do
     echo "Setting NVME_USED              to: \"$NVME_USED\""
   else
     echo "NVME_USED               is set to: \"$NVME_USED\""
-    if [[ $NVME_USED = "TRUE"  && $FPGACARD = "KU3" ]]; then
-      SETUP_WARNING="$SETUP_WARNING\n### WARNING ### Setting of NVME_USED=$NVME_USED on KU3 is conflicting!"
+    if [[ $NVME_USED = "TRUE"  && ($FPGACARD = "KU3" || $FPGACARD = "NSA121B") ]]; then
+      SETUP_WARNING="$SETUP_WARNING\n### WARNING ### Setting of NVME_USED=$NVME_USED on KU3 or NSA121B is conflicting!"
     fi
   fi
 

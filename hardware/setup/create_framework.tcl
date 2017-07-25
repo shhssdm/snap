@@ -115,11 +115,19 @@ if { ($fpga_card == "KU3") && ($sdram_used == "TRUE") } {
   set_property used_in_synthesis false           [get_files $sim_dir/core/ddr3_dimm.sv]
 }
 # DDR4 Sim Files
-if { ($fpga_card == "FGT") && ($sdram_used == "TRUE") } {
+if { ($fpga_card == "FGT" ) && ($sdram_used == "TRUE") } {
   add_files    -fileset sim_1 -norecurse -scan_for_includes $ip_dir/ddr4sdram_ex/imports/ddr4_model.sv  >> $log_file
   add_files    -fileset sim_1 -norecurse -scan_for_includes $sim_dir/core/ddr4_dimm.sv  >> $log_file
   set_property used_in_synthesis false           [get_files $sim_dir/core/ddr4_dimm.sv]
 }
+# DDR4 Sim Files
+if { ($fpga_card == "NSA121B" ) && ($sdram_used == "TRUE") } {
+	puts "see here!"
+  add_files    -fileset sim_1 -norecurse -scan_for_includes $ip_dir/ddr4sdram_ex/imports/ddr4_model.sv  >> $log_file
+  add_files    -fileset sim_1 -norecurse -scan_for_includes $sim_dir/core/ddr4_dimm_nsa121b.sv  >> $log_file
+  set_property used_in_synthesis false           [get_files $sim_dir/core/ddr4_dimm_nsa121b.sv]
+}
+
 update_compile_order -fileset sources_1 >> $log_file
 update_compile_order -fileset sim_1 >> $log_file
 
@@ -150,6 +158,18 @@ if { $fpga_card == "KU3" } {
     export_ip_user_files -of_objects  [get_files "$ip_dir/axi_clock_converter/axi_clock_converter.xci"] -force >> $log_file
     add_files -norecurse $ip_dir/ddr3sdram/ddr3sdram.xci >> $log_file
     export_ip_user_files -of_objects  [get_files "$ip_dir/ddr3sdram/ddr3sdram.xci"] -force >> $log_file
+  }
+} elseif { $fpga_card == "NSA121B" } {
+  if { $bram_used == "TRUE" } {
+    add_files -norecurse $ip_dir/axi_clock_converter/axi_clock_converter.xci >> $log_file
+    export_ip_user_files -of_objects  [get_files "$ip_dir/axi_clock_converter/axi_clock_converter.xci"] -force >> $log_file
+    add_files -norecurse $ip_dir/block_RAM/block_RAM.xci >> $log_file
+    export_ip_user_files -of_objects  [get_files "$ip_dir/block_RAM/block_RAM.xci"] -force >> $log_file
+  } elseif { $sdram_used == "TRUE" } {
+    add_files -norecurse $ip_dir/axi_clock_converter/axi_clock_converter.xci >> $log_file
+    export_ip_user_files -of_objects  [get_files "$ip_dir/axi_clock_converter/axi_clock_converter.xci"] -force >> $log_file
+    add_files -norecurse $ip_dir/ddr4sdram/ddr4sdram.xci >> $log_file
+    export_ip_user_files -of_objects  [get_files "$ip_dir/ddr4sdram/ddr4sdram.xci"] -force >> $log_file
   }
 } elseif { $fpga_card == "FGT" } {
   if { $bram_used == "TRUE" } {

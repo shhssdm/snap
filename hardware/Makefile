@@ -32,6 +32,12 @@ ifeq "$(FPGACARD)" "KU3"
 	export DDRI_USED=$(SDRAM_USED)
 	export NVME_USED=FALSE
 endif
+ifeq "$(FPGACARD)" "NSA121B"
+	export DDR3_USED=FALSE
+	export DDR4_USED=$(SDRAM_USED)
+	export DDRI_USED=$(SDRAM_USED)
+	export NVME_USED=FALSE
+endif
 
 ifeq "$(FPGACARD)" "FGT"
 	export DDR3_USED=FALSE
@@ -140,6 +146,10 @@ setup_environment:
 	@if [ $(FPGACARD) = "KU3" ]; then \
 		ln -f -s $(SNAP_HDL_CORE)/psl_fpga_ku3.vhd_source  $(SNAP_HDL_CORE)/psl_fpga.vhd_source; \
 		ln -f -s $(SNAP_HDL_CORE)/psl_accel_ku3.vhd_source $(SNAP_HDL_CORE)/psl_accel.vhd_source; \
+	fi
+	@if [ $(FPGACARD) = "NSA121B" ]; then \
+		ln -f -s $(SNAP_HDL_CORE)/psl_fpga_nsa121b.vhd_source  $(SNAP_HDL_CORE)/psl_fpga.vhd_source; \
+		ln -f -s $(SNAP_HDL_CORE)/psl_accel_nsa121b.vhd_source $(SNAP_HDL_CORE)/psl_accel.vhd_source; \
 	fi
 	@if [ $(FPGACARD) = "FGT" ]; then \
 		ln -f -s $(SNAP_HDL_CORE)/psl_fpga_fgt.vhd_source  $(SNAP_HDL_CORE)/psl_fpga.vhd_source; \
