@@ -12,8 +12,8 @@ if { $argc != 3 } {
   exit 90
 } 
 
-if { $fpgacard != "FGT" && $fpgacard != "KU3"  } {
-  puts "Error: Environment FPGACARD must be set to FGT or KU3"
+if { $fpgacard != "FGT" && $fpgacard != "KU3" && $fpgacard != "NSA121B" } {
+  puts "Error: Environment FPGACARD must be set to FGT or KU3 or NSA121B"
   exit 91
 }
 

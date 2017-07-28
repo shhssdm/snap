@@ -790,9 +790,9 @@ module top (
      refclk_sdram_p = !refclk_sdram_p;	               //-- only for DDRI_USED=TRUE -- only for FPGACARD=FGT
   end						       //-- only for DDRI_USED=TRUE -- only for FPGACARD=FGT
                                                        //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
-  // 400.160MHz NSA121B reference clock		       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
+  // 100MHz NSA121B reference clock		       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
   always begin					       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
-     #(2.499ns / 2.0);				       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
+     #(10ns / 2.0);				       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
      refclk_sdram_p = !refclk_sdram_p;	               //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
   end						       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
 
@@ -813,9 +813,9 @@ module top (
      sys_clk_p = !sys_clk_p;		               //-- only for DDRI_USED=TRUE -- only for FPGACARD=FGT
   end						       //-- only for DDRI_USED=TRUE -- only for FPGACARD=FGT
                                                        //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
-  // 400.160MHz NSA121B system clock		       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
+  // 100MHz NSA121B system clock		       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
   always begin					       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
-     #(2.499ns / 2.0);				       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
+     #(10ns / 2.0);				       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
      sys_clk_p = !sys_clk_p;     	               //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
   end						       //-- only for DDRI_USED=TRUE -- only for FPGACARD=NSA121B
                                                        //-- only for NVME_USED=TRUE
