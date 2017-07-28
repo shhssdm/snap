@@ -72,6 +72,16 @@ if { $fpgacard == "KU3" } {
   }
 }
 
+if { $fpgacard == "NSA121B" } {
+  if { $bram_used == "TRUE" } {
+    set FUNC_NAME _BRAM_NSA121B
+  } elseif { $ddr3_used == "TRUE" } {
+    set FUNC_NAME _DDR4_NSA121B
+  } else {
+    set FUNC_NAME _NSA121B
+  }
+}
+
 if { $fpgacard == "FGT" } {
   if { $bram_used == "TRUE" } {
     set FUNC_NAME _BRAM_FGT

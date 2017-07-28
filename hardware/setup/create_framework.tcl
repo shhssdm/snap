@@ -245,6 +245,14 @@ if { $fpga_card == "KU3" } {
     add_files -fileset constrs_1 -norecurse $root_dir/setup/KU3/snap_ddr3_b0pins.xdc
     set_property used_in_synthesis false [get_files $root_dir/setup/KU3/snap_ddr3_b0pins.xdc]
   }
+} elseif {$fpga_card == "NSA121B" } {
+  if { $bram_used == "TRUE" } {
+    add_files -fileset constrs_1 -norecurse $root_dir/setup/NSA121B/snap_refclk100.xdc
+  } elseif { $sdram_used == "TRUE" } {
+    add_files -fileset constrs_1 -norecurse $root_dir/setup/NSA121B/snap_refclk100.xdc
+    add_files -fileset constrs_1 -norecurse $root_dir/setup/NSA121B/snap_ddr4_c1pins.xdc
+    set_property used_in_synthesis false [get_files $root_dir/setup/NSA121B/snap_ddr4_c1pins.xdc]
+  }
 } elseif { $fpga_card == "FGT" } {
   if { $bram_used == "TRUE" } {
     add_files -fileset constrs_1 -norecurse  $root_dir/setup/FGT/snap_refclk266.xdc
