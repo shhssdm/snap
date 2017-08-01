@@ -36,6 +36,18 @@ ENTITY action_wrapper IS
     C_M_AXI_CARD_MEM0_RUSER_WIDTH    : integer   := 1;
     C_M_AXI_CARD_MEM0_BUSER_WIDTH    : integer   := 1;
 
+    -- Parameters for Axi Master Bus Interface AXI_NVME : to NVMe
+	-- This part is needed to be compatible with HLS generated action wrapper
+	-- But here not in use.
+    C_M_AXI_NVME_ID_WIDTH       : integer   := 1;
+    C_M_AXI_NVME_ADDR_WIDTH     : integer   := 32;
+    C_M_AXI_NVME_DATA_WIDTH     : integer   := 32;
+    C_M_AXI_NVME_AWUSER_WIDTH   : integer   := 1;
+    C_M_AXI_NVME_ARUSER_WIDTH   : integer   := 1;
+    C_M_AXI_NVME_WUSER_WIDTH    : integer   := 1;
+    C_M_AXI_NVME_RUSER_WIDTH    : integer   := 1;
+    C_M_AXI_NVME_BUSER_WIDTH    : integer   := 1;
+
     -- Parameters for Axi Slave Bus Interface AXI_CTRL_REG
     C_S_AXI_CTRL_REG_DATA_WIDTH      : integer   := 32;
     C_S_AXI_CTRL_REG_ADDR_WIDTH      : integer   := 32;
@@ -113,7 +125,7 @@ ENTITY action_wrapper IS
     m_axi_nvme_arcache         : OUT STD_LOGIC_VECTOR ( 3 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_arid            : OUT STD_LOGIC_VECTOR ( 0 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_arlen           : OUT STD_LOGIC_VECTOR ( 7 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
-    m_axi_nvme_arlock          : OUT STD_LOGIC;							       -- only for NVME_USED=TRUE 	
+    m_axi_nvme_arlock          : OUT STD_LOGIC_VECTOR ( 1 DOWNTO 0 );   			       -- only for NVME_USED=TRUE 	
     m_axi_nvme_arprot          : OUT STD_LOGIC_VECTOR ( 2 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_arqos           : OUT STD_LOGIC_VECTOR ( 3 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_arready         : IN  STD_LOGIC;							       -- only for NVME_USED=TRUE 	
@@ -126,7 +138,7 @@ ENTITY action_wrapper IS
     m_axi_nvme_awcache         : OUT STD_LOGIC_VECTOR ( 3 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_awid            : OUT STD_LOGIC_VECTOR ( 0 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_awlen           : OUT STD_LOGIC_VECTOR ( 7 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
-    m_axi_nvme_awlock          : OUT STD_LOGIC;							       -- only for NVME_USED=TRUE 	
+    m_axi_nvme_awlock          : OUT STD_LOGIC_VECTOR ( 1 DOWNTO 0 );   			       -- only for NVME_USED=TRUE 	
     m_axi_nvme_awprot          : OUT STD_LOGIC_VECTOR ( 2 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_awqos           : OUT STD_LOGIC_VECTOR ( 3 DOWNTO 0 );				       -- only for NVME_USED=TRUE 	
     m_axi_nvme_awready         : IN  STD_LOGIC;							       -- only for NVME_USED=TRUE 	
@@ -421,6 +433,11 @@ ARCHITECTURE STRUCTURE OF action_wrapper IS
   END COMPONENT action_example;
 
 BEGIN
+	-- action_examples gives only 1 bit, cannot match with the standard AXI interface.
+	-- Cut here. 
+	m_axi_nvme_awlock <= "0";
+	m_axi_nvme_arlock <= "0";
+
 action_0: COMPONENT action_example
   GENERIC MAP (
     -- Parameters for Axi Master Bus Interface AXI_CARD_MEM0 : to DDR memory
@@ -505,7 +522,7 @@ action_0: COMPONENT action_example
     axi_nvme_arcache           => m_axi_nvme_arcache,                                    -- only for NVME_USED=TRUE
     axi_nvme_arid              => m_axi_nvme_arid,                                       -- only for NVME_USED=TRUE
     axi_nvme_arlen             => m_axi_nvme_arlen,                                      -- only for NVME_USED=TRUE
-    axi_nvme_arlock            => m_axi_nvme_arlock,                                     -- only for NVME_USED=TRUE
+    axi_nvme_arlock            => open,                                                  -- only for NVME_USED=TRUE
     axi_nvme_arprot            => m_axi_nvme_arprot,                                     -- only for NVME_USED=TRUE
     axi_nvme_arqos             => m_axi_nvme_arqos,                                      -- only for NVME_USED=TRUE
     axi_nvme_arready           => m_axi_nvme_arready,                                    -- only for NVME_USED=TRUE
@@ -518,7 +535,7 @@ action_0: COMPONENT action_example
     axi_nvme_awcache           => m_axi_nvme_awcache,                                    -- only for NVME_USED=TRUE
     axi_nvme_awid              => m_axi_nvme_awid,                                       -- only for NVME_USED=TRUE
     axi_nvme_awlen             => m_axi_nvme_awlen,                                      -- only for NVME_USED=TRUE
-    axi_nvme_awlock            => m_axi_nvme_awlock,                                     -- only for NVME_USED=TRUE
+    axi_nvme_awlock            => open,                                                  -- only for NVME_USED=TRUE
     axi_nvme_awprot            => m_axi_nvme_awprot,                                     -- only for NVME_USED=TRUE
     axi_nvme_awqos             => m_axi_nvme_awqos,                                      -- only for NVME_USED=TRUE
     axi_nvme_awready           => m_axi_nvme_awready,                                    -- only for NVME_USED=TRUE
