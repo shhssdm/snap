@@ -750,20 +750,20 @@ module top (
   wire  [8:0]   c0_ddr4_dqs_t;   		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=FGT
 
   // DDR4 Signals        			       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire          c1_ddr4_act_n;                         //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [16:0]  c1_ddr4_adr;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [1:0]   c1_ddr4_ba;      		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [1:0]   c1_ddr4_bg;      		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [0:0]   c1_ddr4_cke;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [0:0]   c1_ddr4_odt;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [0:0]   c1_ddr4_cs_n;    		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [0:0]   c1_ddr4_ck_t;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [0:0]   c1_ddr4_ck_c;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire          c1_ddr4_reset_n; 		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [8:0]   c1_ddr4_dm_dbi_n;		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [71:0]  c1_ddr4_dq;      		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [8:0]   c1_ddr4_dqs_c;   		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-  wire  [8:0]   c1_ddr4_dqs_t;   		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire          c2_ddr4_act_n;                         //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [16:0]  c2_ddr4_adr;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [1:0]   c2_ddr4_ba;      		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [1:0]   c2_ddr4_bg;      		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [0:0]   c2_ddr4_cke;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [0:0]   c2_ddr4_odt;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [0:0]   c2_ddr4_cs_n;    		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [0:0]   c2_ddr4_ck_t;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [0:0]   c2_ddr4_ck_c;     		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire          c2_ddr4_reset_n; 		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [8:0]   c2_ddr4_dm_dbi_n;		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [71:0]  c2_ddr4_dq;      		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [8:0]   c2_ddr4_dqs_c;   		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+  wire  [8:0]   c2_ddr4_dqs_t;   		       //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
   // NVME Signals        			       //-- only for NVME_USED=TRUE
   wire  [ 3:0] pcie_rc0_rxn;                           //-- only for NVME_USED=TRUE
   wire  [ 3:0] pcie_rc0_rxp;                           //-- only for NVME_USED=TRUE
@@ -927,22 +927,22 @@ module top (
     .c0_ddr4_dqs_c          (c0_ddr4_dqs_c),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=FGT
     .c0_ddr4_dqs_t          (c0_ddr4_dqs_t),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=FGT
     // DDR4                                                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_sys_clk_p           (sys_clk_p),                    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_sys_clk_n           (~sys_clk_p),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_act_n          (c1_ddr4_act_n),                //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_adr            (c1_ddr4_adr),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_ba             (c1_ddr4_ba),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_bg             (c1_ddr4_bg),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_cke            (c1_ddr4_cke),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_odt            (c1_ddr4_odt),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_cs_n           (c1_ddr4_cs_n),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_ck_t           (c1_ddr4_ck_t),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_ck_c           (c1_ddr4_ck_c),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_reset_n        (c1_ddr4_reset_n),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_dm_dbi_n       (c1_ddr4_dm_dbi_n),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_dq             (c1_ddr4_dq),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_dqs_c          (c1_ddr4_dqs_c),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c1_ddr4_dqs_t          (c1_ddr4_dqs_t),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_sys_clk_p           (sys_clk_p),                    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_sys_clk_n           (~sys_clk_p),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_act_n          (c2_ddr4_act_n),                //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_adr            (c2_ddr4_adr),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_ba             (c2_ddr4_ba),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_bg             (c2_ddr4_bg),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_cke            (c2_ddr4_cke),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_odt            (c2_ddr4_odt),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_cs_n           (c2_ddr4_cs_n),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_ck_t           (c2_ddr4_ck_t),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_ck_c           (c2_ddr4_ck_c),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_reset_n        (c2_ddr4_reset_n),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_dm_dbi_n       (c2_ddr4_dm_dbi_n),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_dq             (c2_ddr4_dq),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_dqs_c          (c2_ddr4_dqs_c),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c2_ddr4_dqs_t          (c2_ddr4_dqs_t),		    //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
 
     // NVME                                                 //-- only for NVME_USED=TRUE
     .nvme_reset_n           (sys_reset_n_q),                //-- only for NVME_USED=TRUE
@@ -1003,20 +1003,20 @@ module top (
     );                                                      //-- only for DDR4_USED=TRUE  -- only for FPGACARD=FGT
   ddr4_dimm_nsa121b ddr4_dimm_nsa121b (                             //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
     .sys_reset              (~sys_reset_n_q),               //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_act_n          (c1_ddr4_act_n),                //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_adr            (c1_ddr4_adr),                  //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_ba             (c1_ddr4_ba),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_bg             (c1_ddr4_bg),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_cke            (c1_ddr4_cke),                  //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_odt            (c1_ddr4_odt),                  //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_cs_n           (c1_ddr4_cs_n),                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_ck_t           (c1_ddr4_ck_t),                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_ck_c           (c1_ddr4_ck_c),                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_reset_n        (c1_ddr4_reset_n),              //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_dm_dbi_n       (c1_ddr4_dm_dbi_n),             //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_dq             (c1_ddr4_dq),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_dqs_c          (c1_ddr4_dqs_c),                //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
-    .c0_ddr4_dqs_t          (c1_ddr4_dqs_t)                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_act_n          (c2_ddr4_act_n),                //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_adr            (c2_ddr4_adr),                  //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_ba             (c2_ddr4_ba),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_bg             (c2_ddr4_bg),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_cke            (c2_ddr4_cke),                  //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_odt            (c2_ddr4_odt),                  //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_cs_n           (c2_ddr4_cs_n),                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_ck_t           (c2_ddr4_ck_t),                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_ck_c           (c2_ddr4_ck_c),                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_reset_n        (c2_ddr4_reset_n),              //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_dm_dbi_n       (c2_ddr4_dm_dbi_n),             //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_dq             (c2_ddr4_dq),                   //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_dqs_c          (c2_ddr4_dqs_c),                //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
+    .c0_ddr4_dqs_t          (c2_ddr4_dqs_t)                 //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
     );                                                      //-- only for DDR4_USED=TRUE  -- only for FPGACARD=NSA121B
 
                                                             //-- only for NVME_USED=TRUE

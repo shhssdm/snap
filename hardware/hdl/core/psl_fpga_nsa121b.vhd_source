@@ -33,24 +33,24 @@ ENTITY psl_fpga IS
     
 	-- DDR4 SDRAM Interface                                                     -- only for DDR4_USED=TRUE
     -- Semptian NSA121B card has two DDR4 SO-DIMMs                              -- only for DDR4_USED=TRUE
-    -- SNAP is only using the C1 DIMM (C2 DIMM not used.)                       -- only for DDR4_USED=TRUE
+    -- SNAP is only using the C2 DIMM (C1 DIMM not used.)                       -- only for DDR4_USED=TRUE
     
-    c1_sys_clk_p              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
-    c1_sys_clk_n              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
-    c1_ddr4_adr               : OUT   STD_LOGIC_VECTOR(16 DOWNTO 0);            -- only for DDR4_USED=TRUE
-    c1_ddr4_ba                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_cke               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_cs_n              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_dm_dbi_n          : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_dq                : INOUT STD_LOGIC_VECTOR(71 DOWNTO 0);            -- only for DDR4_USED=TRUE
-    c1_ddr4_dqs_c             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_dqs_t             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_odt               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_bg                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_reset_n           : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
-    c1_ddr4_act_n             : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
-    c1_ddr4_ck_c              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-    c1_ddr4_ck_t              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_sys_clk_p              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
+    c2_sys_clk_n              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
+    c2_ddr4_adr               : OUT   STD_LOGIC_VECTOR(16 DOWNTO 0);            -- only for DDR4_USED=TRUE
+    c2_ddr4_ba                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_cke               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_cs_n              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_dm_dbi_n          : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_dq                : INOUT STD_LOGIC_VECTOR(71 DOWNTO 0);            -- only for DDR4_USED=TRUE
+    c2_ddr4_dqs_c             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_dqs_t             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_odt               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_bg                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_reset_n           : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
+    c2_ddr4_act_n             : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
+    c2_ddr4_ck_c              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+    c2_ddr4_ck_t              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
   
 
     -- flash bus
@@ -188,22 +188,22 @@ Component psl_accel
        refclk_sdram_n                     : IN    STD_LOGIC;                       -- only for DDRI_USED=TRUE
                                                                                    -- only for DDR4_USED=TRUE 
        -- DDR4 SDRAM Interface                                                     -- only for DDR4_USED=TRUE
-       c1_sys_clk_p              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
-       c1_sys_clk_n              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
-       c1_ddr4_adr               : OUT   STD_LOGIC_VECTOR(16 DOWNTO 0);            -- only for DDR4_USED=TRUE
-       c1_ddr4_ba                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_cke               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_cs_n              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_dm_dbi_n          : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_dq                : INOUT STD_LOGIC_VECTOR(71 DOWNTO 0);            -- only for DDR4_USED=TRUE
-       c1_ddr4_dqs_c             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_dqs_t             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_odt               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_bg                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_reset_n           : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
-       c1_ddr4_act_n             : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
-       c1_ddr4_ck_c              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
-       c1_ddr4_ck_t              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_sys_clk_p              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
+       c2_sys_clk_n              : IN    STD_LOGIC;                                -- only for DDR4_USED=TRUE
+       c2_ddr4_adr               : OUT   STD_LOGIC_VECTOR(16 DOWNTO 0);            -- only for DDR4_USED=TRUE
+       c2_ddr4_ba                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_cke               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_cs_n              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_dm_dbi_n          : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_dq                : INOUT STD_LOGIC_VECTOR(71 DOWNTO 0);            -- only for DDR4_USED=TRUE
+       c2_ddr4_dqs_c             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_dqs_t             : INOUT STD_LOGIC_VECTOR(8 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_odt               : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_bg                : OUT   STD_LOGIC_VECTOR(1 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_reset_n           : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
+       c2_ddr4_act_n             : OUT   STD_LOGIC;                                -- only for DDR4_USED=TRUE
+       c2_ddr4_ck_c              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
+       c2_ddr4_ck_t              : OUT   STD_LOGIC_VECTOR(0 DOWNTO 0);             -- only for DDR4_USED=TRUE
 
        -- Parity Check enable and Host Clock input
        ah_paren: out std_logic;
@@ -448,22 +448,22 @@ begin
          refclk_sdram_n       => fpga_sysclk100m_n,           -- only for DDRI_USED=TRUE 
          refclk_sdram_p       => fpga_sysclk100m_p,		    -- only for DDRI_USED=TRUE 
 
-         c1_sys_clk_p            => c1_sys_clk_p    ,	    -- only for DDR4_USED=TRUE 
-         c1_sys_clk_n            => c1_sys_clk_n    ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_adr             => c1_ddr4_adr     ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_ba              => c1_ddr4_ba      ,       -- only for DDR4_USED=TRUE 
-         c1_ddr4_cke             => c1_ddr4_cke     ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_cs_n            => c1_ddr4_cs_n    ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_dm_dbi_n        => c1_ddr4_dm_dbi_n,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_dq              => c1_ddr4_dq      ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_dqs_c           => c1_ddr4_dqs_c   ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_dqs_t           => c1_ddr4_dqs_t   ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_odt             => c1_ddr4_odt     ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_bg              => c1_ddr4_bg      ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_reset_n         => c1_ddr4_reset_n ,       -- only for DDR4_USED=TRUE 
-         c1_ddr4_act_n           => c1_ddr4_act_n   ,       -- only for DDR4_USED=TRUE 
-         c1_ddr4_ck_c            => c1_ddr4_ck_c    ,	    -- only for DDR4_USED=TRUE 
-         c1_ddr4_ck_t            => c1_ddr4_ck_t    ,	    -- only for DDR4_USED=TRUE 
+         c2_sys_clk_p            => c2_sys_clk_p    ,	    -- only for DDR4_USED=TRUE 
+         c2_sys_clk_n            => c2_sys_clk_n    ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_adr             => c2_ddr4_adr     ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_ba              => c2_ddr4_ba      ,       -- only for DDR4_USED=TRUE 
+         c2_ddr4_cke             => c2_ddr4_cke     ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_cs_n            => c2_ddr4_cs_n    ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_dm_dbi_n        => c2_ddr4_dm_dbi_n,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_dq              => c2_ddr4_dq      ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_dqs_c           => c2_ddr4_dqs_c   ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_dqs_t           => c2_ddr4_dqs_t   ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_odt             => c2_ddr4_odt     ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_bg              => c2_ddr4_bg      ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_reset_n         => c2_ddr4_reset_n ,       -- only for DDR4_USED=TRUE 
+         c2_ddr4_act_n           => c2_ddr4_act_n   ,       -- only for DDR4_USED=TRUE 
+         c2_ddr4_ck_c            => c2_ddr4_ck_c    ,	    -- only for DDR4_USED=TRUE 
+         c2_ddr4_ck_t            => c2_ddr4_ck_t    ,	    -- only for DDR4_USED=TRUE 
 
          ah_paren             => a0h_paren,
          ha_pclock            => ha0_pclock
