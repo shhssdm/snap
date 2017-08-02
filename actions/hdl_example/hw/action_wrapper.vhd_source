@@ -435,8 +435,8 @@ ARCHITECTURE STRUCTURE OF action_wrapper IS
 BEGIN
 	-- action_examples gives only 1 bit, cannot match with the standard AXI interface.
 	-- Cut here. 
-	m_axi_nvme_awlock <= "0";
-	m_axi_nvme_arlock <= "0";
+	m_axi_nvme_awlock <= "00";
+	m_axi_nvme_arlock <= "00";
 
 action_0: COMPONENT action_example
   GENERIC MAP (
