@@ -221,14 +221,20 @@ static void process_action(snap_membus_t *din_gmem,
 	snapu32_t ReturnCode = SNAP_RETC_SUCCESS;
 	snapu64_t InputAddress;
 	snapu64_t OutputAddress;
+	snapu64_t dram_addr_host_to_ssd;
+	snapu64_t dram_addr_ssd_to_host;
+	snapu64_t memcopy_InputAddress;
+	snapu64_t memcopy_OutputAddress;
 	snapu64_t address_xfer_offset;
 	snapu64_t nvme_address_xfer_offset;
 	snap_membus_t  buf_gmem[MAX_NB_OF_WORDS_READ];
 	// if 4096 bytes max => 64 words
 
 	// byte address received need to be aligned with port width
-	InputAddress = (act_reg->Data.in.addr)   >> ADDR_RIGHT_SHIFT;
-	OutputAddress = (act_reg->Data.out.addr) >> ADDR_RIGHT_SHIFT;
+	InputAddress = act_reg->Data.in.addr;
+	OutputAddress = act_reg->Data.out.addr;
+	dram_addr_host_to_ssd = 0x00000000;
+	dram_addr_ssd_to_host = 0x80000000;
 
 	address_xfer_offset = 0x0;
 	nvme_address_xfer_offset = 0x0;
@@ -250,16 +256,27 @@ static void process_action(snap_membus_t *din_gmem,
 
 	nb_nvme_blocks_to_xfer = (nvme_action_xfer_size - 1) / MAX_SSD_BLOCK_XFER + 1;
 
+	// Check if the source is ssd
 	if (act_reg->Data.in.type == SNAP_ADDRTYPE_NVME)
 	{
+		OutputAddress >>= ADDR_RIGHT_SHIFT;
+		memcopy_InputAddress = dram_addr_ssd_to_host >> ADDR_RIGHT_SHIFT;
+		memcopy_OutputAddress = OutputAddress;
+
 		for ( i = 0; i < nb_nvme_blocks_to_xfer; i++)
 		{
 			nvme_xfer_size = MIN(nvme_action_xfer_size, (snapu32_t)MAX_SSD_BLOCK_XFER);
-			rc |= read_burst_of_data_from_ssd(d_nvme, 0x00000000 + nvme_address_xfer_offset, InputAddress + nvme_address_xfer_offset, nvme_xfer_size - 1);
+			rc |= read_burst_of_data_from_ssd(d_nvme, dram_addr_ssd_to_host + nvme_address_xfer_offset, InputAddress + nvme_address_xfer_offset, nvme_xfer_size - 1);
 
 			nvme_action_xfer_size -= nvme_xfer_size;
 			nvme_address_xfer_offset += (snapu64_t)(nvme_xfer_size << 9);
 		}
+	}
+	else
+	{
+		InputAddress >>= ADDR_RIGHT_SHIFT;
+		memcopy_InputAddress = InputAddress;
+		memcopy_OutputAddress = dram_addr_host_to_ssd >> ADDR_RIGHT_SHIFT;
 	}
 
 	// buffer size is hardware limited by MAX_NB_OF_BYTES_READ
@@ -278,22 +295,23 @@ static void process_action(snap_membus_t *din_gmem,
 
 		rc |= read_burst_of_data_from_mem(din_gmem, d_ddrmem,
 						  act_reg->Data.in.type,
-			InputAddress + address_xfer_offset, buf_gmem, xfer_size);
+			memcopy_InputAddress + address_xfer_offset, buf_gmem, xfer_size);
 
 		rc |= write_burst_of_data_to_mem(dout_gmem, d_ddrmem,
 						 act_reg->Data.out.type,
-			OutputAddress + address_xfer_offset, buf_gmem, xfer_size);
+			memcopy_OutputAddress + address_xfer_offset, buf_gmem, xfer_size);
 
 		action_xfer_size -= xfer_size;
 		address_xfer_offset += (snapu64_t)(xfer_size >> ADDR_RIGHT_SHIFT);
 	} // end of L0 loop
 
+	// Check if the destination is ssd
 	if (act_reg->Data.out.type == SNAP_ADDRTYPE_NVME)
 	{
 		for ( i = 0; i < nb_nvme_blocks_to_xfer; i++)
 		{
 			nvme_xfer_size = MIN(nvme_action_xfer_size, (snapu32_t)MAX_SSD_BLOCK_XFER);
-			rc |= write_burst_of_data_to_ssd(d_nvme, 0x00000000 + nvme_address_xfer_offset, OutputAddress + nvme_address_xfer_offset, nvme_xfer_size - 1);
+			rc |= write_burst_of_data_to_ssd(d_nvme, dram_addr_host_to_ssd + nvme_address_xfer_offset, OutputAddress + nvme_address_xfer_offset, nvme_xfer_size - 1);
 
 			nvme_action_xfer_size -= nvme_xfer_size;
 			nvme_address_xfer_offset += (snapu64_t)(nvme_xfer_size << 9);
