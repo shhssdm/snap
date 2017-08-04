@@ -54,7 +54,7 @@ short write_burst_of_data_to_mem(snap_membus_t *dout_gmem,
 
        		rc =  0;
 		break;
-	case SNAP_ADDRTYPE_CARD_DRAM:
+	case SNAP_ADDRTYPE_NVME:
 		// Patch to Issue#320 - memcopy doesn't handle 4Kbytes xfer
 		//memcpy((snap_membus_t  *) (d_ddrmem + output_address),
 		//       buffer, size_in_bytes_to_transfer);
@@ -101,7 +101,7 @@ short read_burst_of_data_from_mem(snap_membus_t *din_gmem,
 
        		rc =  0;
 		break;
-	case SNAP_ADDRTYPE_CARD_DRAM:
+	case SNAP_ADDRTYPE_NVME:
 		// Patch to Issue#320 - memcopy doesn't handle 4Kbytes xfer
 		//memcpy(buffer, (snap_membus_t  *) (d_ddrmem + input_address),
 		//       size_in_bytes_to_transfer);
@@ -118,24 +118,111 @@ short read_burst_of_data_from_mem(snap_membus_t *din_gmem,
 	return rc;
 }
 
+// WRITE DATA TO SSD
+short write_burst_of_data_to_ssd(snapu32_t *d_nvme,
+				 snapu64_t d_ddrmem,
+				 snapu64_t d_ssd,
+				 snapu32_t num_of_blocks_to_transfer)
+{
+	short rc;
+	int status;
+
+	// Set card ddr address
+	((volatile int*)d_nvme)[0] = d_ddrmem & 0xFFFFFFFF;
+	((volatile int*)d_nvme)[1] = 0x00000002;
+//	((volatile int*)d_nvme)[1] = (d_ddrmem >> 32) & 0xFFFFFFFF;
+
+	// Set card ssd address
+	((volatile int*)d_nvme)[2] = d_ssd & 0xFFFFFFFF;
+	((volatile int*)d_nvme)[3] = (d_ssd >> 32) & 0xFFFFFFFF;
+	
+	// Set number of blocks to transfer
+	((volatile int*)d_nvme)[4] = num_of_blocks_to_transfer;
+
+	// Initiate ssd read
+	((volatile int*)d_nvme)[5] = 0x11;
+
+	rc = 1;
+
+	// Poll the status register until the operation is finished
+	while(1)
+	{
+		if(status = ((volatile int*)d_nvme)[1])
+		{
+			if(status & 0x10)
+				rc = 1;
+			else
+				rc = 0;
+			break;
+		}
+	}
+
+	return rc;
+}
+
+// READ DATA FROM SSD
+short read_burst_of_data_from_ssd(snapu32_t *d_nvme,
+				  snapu64_t d_ddrmem,
+				  snapu64_t d_ssd,
+				  snapu32_t num_of_blocks_to_transfer)
+{
+	short rc;
+	int status;
+
+	// Set card ddr address
+	((volatile int*)d_nvme)[0] = d_ddrmem & 0xFFFFFFFF;
+	((volatile int*)d_nvme)[1] = 0x00000002;
+//	((volatile int*)d_nvme)[1] = (d_ddrmem >> 32) & 0xFFFFFFFF;
+
+	// Set card ssd addres
+	((volatile int*)d_nvme)[2] = d_ssd & 0xFFFFFFFF;
+	((volatile int*)d_nvme)[3] = (d_ssd >> 32) & 0xFFFFFFFF;
+
+	// Set number of blocks to transfer
+	((volatile int*)d_nvme)[4] = num_of_blocks_to_transfer;
+
+	// Initiate ssd read
+	((volatile int*)d_nvme)[5] = 0x10;
+
+	// Poll the status register until the operation is finished
+	while(1)
+	{
+		if(status = ((volatile int*)d_nvme)[1])
+		{
+			if(status & 0x10)
+				rc = 1;
+			else
+				rc = 0;
+			break;
+		}
+	}
+
+	return rc;
+}
+
 //----------------------------------------------------------------------
 //--- MAIN PROGRAM -----------------------------------------------------
 //----------------------------------------------------------------------
 static void process_action(snap_membus_t *din_gmem,
                            snap_membus_t *dout_gmem,
                            snap_membus_t *d_ddrmem,
+			   snapu32_t *d_nvme,
                            action_reg *act_reg)
 {
 	// VARIABLES
 	snapu32_t xfer_size;
+	snapu32_t nvme_xfer_size;
 	snapu32_t action_xfer_size;
+	snapu32_t nvme_action_xfer_size;
 	snapu32_t nb_blocks_to_xfer;
+	snapu32_t nb_nvme_blocks_to_xfer;
 	snapu16_t i;
 	short rc = 0;
 	snapu32_t ReturnCode = SNAP_RETC_SUCCESS;
 	snapu64_t InputAddress;
 	snapu64_t OutputAddress;
 	snapu64_t address_xfer_offset;
+	snapu64_t nvme_address_xfer_offset;
 	snap_membus_t  buf_gmem[MAX_NB_OF_WORDS_READ];
 	// if 4096 bytes max => 64 words
 
@@ -144,9 +231,11 @@ static void process_action(snap_membus_t *din_gmem,
 	OutputAddress = (act_reg->Data.out.addr) >> ADDR_RIGHT_SHIFT;
 
 	address_xfer_offset = 0x0;
+	nvme_address_xfer_offset = 0x0;
 	// testing sizes to prevent from writing out of bounds
 	action_xfer_size = MIN(act_reg->Data.in.size,
 			       act_reg->Data.out.size);
+	nvme_action_xfer_size = (action_xfer_size - 1) / SSD_BLOCK_SIZE + 1;
 
 	if (act_reg->Data.in.type == SNAP_ADDRTYPE_CARD_DRAM and
 	    act_reg->Data.in.size > CARD_DRAM_SIZE) {
@@ -158,6 +247,20 @@ static void process_action(snap_membus_t *din_gmem,
 	        act_reg->Control.Retc = SNAP_RETC_FAILURE;
 		return;
         }
+
+	nb_nvme_blocks_to_xfer = (nvme_action_xfer_size - 1) / MAX_SSD_BLOCK_XFER + 1;
+
+	if (act_reg->Data.in.type == SNAP_ADDRTYPE_NVME)
+	{
+		for ( i = 0; i < nb_nvme_blocks_to_xfer; i++)
+		{
+			nvme_xfer_size = MIN(nvme_action_xfer_size, (snapu32_t)MAX_SSD_BLOCK_XFER);
+			rc |= read_burst_of_data_from_ssd(d_nvme, 0x00000000 + nvme_address_xfer_offset, InputAddress + nvme_address_xfer_offset, nvme_xfer_size - 1);
+
+			nvme_action_xfer_size -= nvme_xfer_size;
+			nvme_address_xfer_offset += (snapu64_t)(nvme_xfer_size << 9);
+		}
+	}
 
 	// buffer size is hardware limited by MAX_NB_OF_BYTES_READ
 	if(action_xfer_size %MAX_NB_OF_BYTES_READ == 0)
@@ -185,6 +288,18 @@ static void process_action(snap_membus_t *din_gmem,
 		address_xfer_offset += (snapu64_t)(xfer_size >> ADDR_RIGHT_SHIFT);
 	} // end of L0 loop
 
+	if (act_reg->Data.out.type == SNAP_ADDRTYPE_NVME)
+	{
+		for ( i = 0; i < nb_nvme_blocks_to_xfer; i++)
+		{
+			nvme_xfer_size = MIN(nvme_action_xfer_size, (snapu32_t)MAX_SSD_BLOCK_XFER);
+			rc |= write_burst_of_data_to_ssd(d_nvme, 0x00000000 + nvme_address_xfer_offset, OutputAddress + nvme_address_xfer_offset, nvme_xfer_size - 1);
+
+			nvme_action_xfer_size -= nvme_xfer_size;
+			nvme_address_xfer_offset += (snapu64_t)(nvme_xfer_size << 9);
+		}
+	}
+
 	if (rc != 0)
 		ReturnCode = SNAP_RETC_FAILURE;
 
@@ -196,6 +311,7 @@ static void process_action(snap_membus_t *din_gmem,
 void hls_action(snap_membus_t *din_gmem,
 		snap_membus_t *dout_gmem,
 		snap_membus_t *d_ddrmem,
+		snapu32_t *d_nvme,
 		action_reg *act_reg,
 		action_RO_config_reg *Action_Config)
 {
@@ -212,6 +328,10 @@ void hls_action(snap_membus_t *din_gmem,
 #pragma HLS INTERFACE m_axi port=d_ddrmem bundle=card_mem0 offset=slave depth=512 \
   max_read_burst_length=64  max_write_burst_length=64 
 #pragma HLS INTERFACE s_axilite port=d_ddrmem bundle=ctrl_reg offset=0x050
+
+	//NVME Config Interface
+#pragma HLS INTERFACE m_axi port=d_nvme bundle=nvme //offset=slave
+//#pragma HLS INTERFACE s_axilite port=d_nvme bundle=ctrl_reg offset=0x060
 
 	// Host Memory AXI Lite Master Interface
 #pragma HLS DATA_PACK variable=Action_Config
@@ -232,7 +352,7 @@ void hls_action(snap_membus_t *din_gmem,
 		return;
 		break;
 	default:
-        	process_action(din_gmem, dout_gmem, d_ddrmem, act_reg);
+        	process_action(din_gmem, dout_gmem, d_ddrmem, d_nvme, act_reg);
 		break;
 	}
 }

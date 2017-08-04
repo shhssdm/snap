@@ -48,9 +48,9 @@ static void usage(const char *prog)
 	       "  -C, --card <cardno> can be (0...3)\n"
 	       "  -i, --input <file.bin>    input file.\n"
 	       "  -o, --output <file.bin>   output file.\n"
-	       "  -A, --type-in <CARD_DRAM, HOST_DRAM, ...>.\n"
+	       "  -A, --type-in <TYPE_NVME, HOST_DRAM, ...>.\n"
 	       "  -a, --addr-in <addr>      address e.g. in CARD_RAM.\n"
-	       "  -D, --type-out <CARD_DRAM, HOST_DRAM, ...>.\n"
+	       "  -D, --type-out <TYPE_NVME, HOST_DRAM, ...>.\n"
 	       "  -d, --addr-out <addr>     address e.g. in CARD_RAM.\n"
 	       "  -s, --size <size>         size of data.\n"
 	       "  -m, --mode <mode>         mode flags.\n"
@@ -165,8 +165,8 @@ int main(int argc, char *argv[])
 			/* input data */
 		case 'A':
 			space = optarg;
-			if (strcmp(space, "CARD_DRAM") == 0)
-				type_in = SNAP_ADDRTYPE_CARD_DRAM;
+			if (strcmp(space, "TYPE_NVME") == 0)
+				type_in = SNAP_ADDRTYPE_NVME;
 			else if (strcmp(space, "HOST_DRAM") == 0)
 				type_in = SNAP_ADDRTYPE_HOST_DRAM;
 			else {
@@ -180,8 +180,8 @@ int main(int argc, char *argv[])
 			/* output data */
 		case 'D':
 			space = optarg;
-			if (strcmp(space, "CARD_DRAM") == 0)
-				type_out = SNAP_ADDRTYPE_CARD_DRAM;
+			if (strcmp(space, "TYPE_NVME") == 0)
+				type_out = SNAP_ADDRTYPE_NVME;
 			else if (strcmp(space, "HOST_DRAM") == 0)
 				type_out = SNAP_ADDRTYPE_HOST_DRAM;
 			else {
