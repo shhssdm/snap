@@ -175,6 +175,10 @@ function test_all_actions() # $1 = card, $2 = accel
 			test_hls_intersect $card $accel
 			RC=$?
 		;;
+		*"10141009")
+			test_hls_nvme_memcopy $card $accel
+			RC=$?
+		;;
 		*)
 			echo "Error: No Test Case found for $action"
 			RC=99
